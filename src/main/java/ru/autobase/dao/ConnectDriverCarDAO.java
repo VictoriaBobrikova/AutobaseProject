@@ -2,8 +2,11 @@ package main.java.ru.autobase.dao;
 
 import main.java.ru.autobase.entity.ConnectDriverCar;
 
-public interface ConnectDriverCarDAO extends GeneralDAO<ConnectDriverCar, Integer> {
+import java.util.Map;
+
+public interface ConnectDriverCarDAO extends GeneralDAO<ConnectDriverCar, ConnectDriverCar> {
     //getDriverWithMaxCars
-    //getCarsByDriverId
-    //getDriverByCarId
+    //List<Car> getCarsByDriverId(Integer id);
+    //List<Driver> getDriversByCarId(Integer id);
+    Map<String, StringBuilder> getAllWithNames();
 }

@@ -1,11 +1,14 @@
 package main.java.ru.autobase;
 
 import main.java.ru.autobase.entity.Car;
+import main.java.ru.autobase.entity.ConnectDriverCar;
 import main.java.ru.autobase.service.CarService;
+import main.java.ru.autobase.service.ConnectDriverCarService;
 import main.java.ru.autobase.service.DriverService;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 
 import main.java.ru.autobase.entity.Driver;
 
@@ -95,6 +98,15 @@ public class Main {
 
 //        Car car_get1 = CarService.getByIdService(17);
 //        System.out.println(car_get1.getIdCar() + " " + car_get1.getCarNumber() + " " + car_get1.getCarMark());
+
+//        ConnectDriverCar conDrCar = new ConnectDriverCar(21,21);
+//        ConnectDriverCarService.deleteService(conDrCar);
+
+        System.out.println("map");
+        Map<String, StringBuilder> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
+        for (Map.Entry<String, StringBuilder> entry : conDrCarMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
 
     }
 }
