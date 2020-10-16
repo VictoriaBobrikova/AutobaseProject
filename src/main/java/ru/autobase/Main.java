@@ -99,14 +99,33 @@ public class Main {
 //        Car car_get1 = CarService.getByIdService(17);
 //        System.out.println(car_get1.getIdCar() + " " + car_get1.getCarNumber() + " " + car_get1.getCarMark());
 
-//        ConnectDriverCar conDrCar = new ConnectDriverCar(21,21);
+//        ConnectDriverCar conDrCar = new ConnectDriverCar(16,16);
 //        ConnectDriverCarService.deleteService(conDrCar);
 
-        System.out.println("map");
-        Map<String, StringBuilder> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
-        for (Map.Entry<String, StringBuilder> entry : conDrCarMap.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+//        System.out.println("map");
+//        Map<String, StringBuilder> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
+//        for (Map.Entry<String, StringBuilder> entry : conDrCarMap.entrySet()) {
+//            System.out.println(entry.getKey() + " : " + entry.getValue());
+//        }
+
+//        ConnectDriverCar conDrCar = new ConnectDriverCar(16,16);
+//        ConnectDriverCarService.deleteService(conDrCar);
+//
+//        List<ConnectDriverCar> conDrCarList = ConnectDriverCarService.getAllService();
+//        for (ConnectDriverCar c : conDrCarList) {
+//            System.out.println(c.getIdDriverCon() + " " + c.getIdCarCon());
+//        };
+
+//        List<Car> cars = ConnectDriverCarService.getCarsByDriverIdService(1);
+//        for (Car c : cars) {
+//            System.out.println(c.getCarNumber());
+//        };
+
+        List<Driver> drivers = ConnectDriverCarService.getDriversByCarIdService(1);
+        for (Driver d : drivers) {
+            System.out.println(d.getDriverName());
         }
+
 
     }
 }

@@ -1,5 +1,6 @@
 package main.java.ru.autobase.dao;
 
+import main.java.ru.autobase.entity.Car;
 import main.java.ru.autobase.entity.ConnectDriverCar;
 import main.java.ru.autobase.entity.Driver;
 
@@ -20,9 +21,11 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
 
     @Override
     public void create(ConnectDriverCar conDrCar) {
-        try (PreparedStatement prepStat = connection.prepareStatement(DriverDAOImpl.SQLDriver.INSERT.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(ConnectDriverCarDAOImpl.SQLConDrCar.INSERT.QUERY)) {
             prepStat.setInt(1, conDrCar.getIdDriverCon());
-            prepStat.setInt(1, conDrCar.getIdCarCon());
+            prepStat.setInt(2, conDrCar.getIdCarCon());
+            prepStat.setInt(3, conDrCar.getIdDriverCon());
+            prepStat.setInt(4, conDrCar.getIdCarCon());
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,12 +60,48 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
     }
 
     @Override
+    public List<Car> getCarsByDriverId(Integer idDriver) {
+        List<Car> cars = new ArrayList<>();
+        try (PreparedStatement prepStat = connection.prepareStatement(
+                ConnectDriverCarDAOImpl.SQLConDrCar.SELECT_CARS.QUERY)) {
+            prepStat.setInt(1, idDriver);
+            ResultSet rs  = prepStat.executeQuery();
+            while (rs.next()) {
+                Car car = new Car();
+                car.setCarNumber(rs.getString("car_number"));
+                cars.add(car);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cars;
+    }
+
+    @Override
+    public List<Driver> getDriversByCarId(Integer idCar) {
+        List<Driver> drivers = new ArrayList<>();
+        try (PreparedStatement prepStat = connection.prepareStatement(
+            ConnectDriverCarDAOImpl.SQLConDrCar.SELECT_DRIVERS.QUERY)) {
+            prepStat.setInt(1, idCar);
+            ResultSet rs  = prepStat.executeQuery();
+            while (rs.next()) {
+                Driver driver = new Driver();
+                driver.setDriverName(rs.getString("driver_name"));
+                drivers.add(driver);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return drivers;
+    }
+
+    @Override
     public Map<String, StringBuilder> getAllWithNames() {
         Map<String, StringBuilder> conDrCarPairs = new HashMap<>();
 
         String sql = "SELECT driver_name, car_number FROM drivers " +
                 "JOIN dc_connection ON id_driver = id_d_con " +
-                "JOIN car_info ON id_c_con = id_car ORDER BY driver_name ASC";
+                "JOIN car_info ON id_c_con = id_car ORDER BY id_d_con";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
             StringBuilder carNumber = new StringBuilder();
@@ -72,7 +111,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
 
             while (rs.next()) {
                 if(!conDrCarPairs.containsKey(rs.getString("driver_name"))) {
-                    carNumber.delete(0, carNumber.length());
+                    carNumber.setLength(0);
                 }
                 carNumber.append("  ");
                 carNumber.append(rs.getString("car_number"));
@@ -87,19 +126,15 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
 
     @Override
     public void update(ConnectDriverCar conDrCar) {
-        try (PreparedStatement prepStat = connection.prepareStatement(DriverDAOImpl.SQLDriver.UPDATE.QUERY)) {
-            prepStat.setInt(1, conDrCar.getIdDriverCon());
-            prepStat.setInt(2, conDrCar.getIdCarCon());
-            prepStat.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        //meaningless method in case of multiple connection, better delete one and create new
     }
 
     @Override
     public void delete(ConnectDriverCar conDrCar) {
-        try (PreparedStatement prepStat = connection.prepareStatement(DriverDAOImpl.SQLDriver.DELETE.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(
+                ConnectDriverCarDAOImpl.SQLConDrCar.DELETE.QUERY)) {
             prepStat.setInt(1, conDrCar.getIdDriverCon());
+            prepStat.setInt(2, conDrCar.getIdCarCon());
             prepStat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,9 +145,15 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
         INSERT("INSERT INTO dc_connection (id_d_con, id_c_con) SELECT ?, ? " +
                 "WHERE NOT EXISTS (SELECT id_d_con, id_c_con FROM dc_connection " +
                 "WHERE id_d_con = ? AND id_c_con = ?) LIMIT 1"),
-        SELECT("SELECT driver_name FROM dc_connection WHERE id_driver = ?"),
-        UPDATE("UPDATE dc_connection SET driver_name = ? WHERE id_driver = ?"),
-        DELETE("DELETE FROM dc_connection WHERE id_driver = ?");
+        SELECT_CARS("SELECT car_number FROM car_info " +
+                "JOIN dc_connection on id_car = id_c_con " +
+                "JOIN drivers on id_d_con = id_driver " +
+                "WHERE id_driver = ?"),
+        SELECT_DRIVERS("SELECT driver_name FROM car_info " +
+                "JOIN dc_connection on id_car = id_c_con " +
+                "JOIN drivers on id_d_con = id_driver " +
+                "WHERE id_car = ?"),
+        DELETE("DELETE FROM dc_connection WHERE id_d_con = ? AND id_c_con = ?");
 
         String QUERY;
 
