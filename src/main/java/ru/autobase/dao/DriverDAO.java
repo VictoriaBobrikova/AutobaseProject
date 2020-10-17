@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface DriverDAO extends GeneralDAO<Driver, Integer> {
     List<Driver> getAllAlphabetOrder();
-    Driver getByCarMark(String carMark);
-    Driver getByCarNumber(String carNumber);
+    List<Driver> getByCarMark(String carMark);
+    List<Driver> getByCarNumber(String carNumber);
 }

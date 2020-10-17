@@ -11,5 +11,5 @@ public interface ConnectDriverCarDAO extends GeneralDAO<ConnectDriverCar, Connec
     //List<Driver> getDriverWithMaxCountCars();
     List<Car> getCarsByDriverId(Integer id);
     List<Driver> getDriversByCarId(Integer id);
-    Map<String, StringBuilder> getAllWithNames();
+    Map<String, String> getAllWithNames();
 }

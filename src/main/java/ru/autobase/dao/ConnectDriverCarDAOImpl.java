@@ -3,12 +3,10 @@ package main.java.ru.autobase.dao;
 import main.java.ru.autobase.entity.Car;
 import main.java.ru.autobase.entity.ConnectDriverCar;
 import main.java.ru.autobase.entity.Driver;
+import main.java.ru.autobase.service.ConnectDriverCarService;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
 
@@ -96,31 +94,36 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
     }
 
     @Override
-    public Map<String, StringBuilder> getAllWithNames() {
-        Map<String, StringBuilder> conDrCarPairs = new HashMap<>();
+    public Map<String, String> getAllWithNames() {
+        List<String> conDrCarList = new ArrayList<>();
 
         String sql = "SELECT driver_name, car_number FROM drivers " +
                 "JOIN dc_connection ON id_driver = id_d_con " +
-                "JOIN car_info ON id_c_con = id_car ORDER BY id_d_con";
+                "JOIN car_info ON id_c_con = id_car ORDER BY driver_name";
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
-            StringBuilder carNumber = new StringBuilder();
             rs.next();
-            carNumber.append(rs.getString("car_number"));
-            conDrCarPairs.put(rs.getString("driver_name"), carNumber);
-
             while (rs.next()) {
-                if(!conDrCarPairs.containsKey(rs.getString("driver_name"))) {
-                    carNumber.setLength(0);
-                }
-                carNumber.append("  ");
-                carNumber.append(rs.getString("car_number"));
-                conDrCarPairs.put(rs.getString("driver_name"), carNumber);
+                conDrCarList.add(rs.getString("driver_name") + " " + rs.getString("car_number"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return conDrCarPairs;
+
+        Map<String, String> conDrCarMap = new HashMap<>();
+        String carNumber = "";
+        for (String con : conDrCarList) {
+            Scanner scan = new Scanner(con);
+            String driverName = scan.next() + " " + scan.next();
+
+            if (!conDrCarMap.containsKey(driverName)) {
+                carNumber = "";
+            }
+            carNumber = carNumber + " " + scan.next();
+            conDrCarMap.put(driverName, carNumber);
+            scan.close();
+        }
+        return conDrCarMap;
     }
 
 

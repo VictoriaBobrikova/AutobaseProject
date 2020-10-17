@@ -50,8 +50,8 @@ public class ConnectDriverCarService {
         return conDrCarList;
     }
 
-    public static Map<String, StringBuilder> getAllWithNamesService () {
-        Map<String, StringBuilder> conDrCarMap = new HashMap<>();
+    public static Map<String, String> getAllWithNamesService () {
+        Map<String, String> conDrCarMap = new HashMap<>();
         try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
             ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
             conDrCarMap = conDrCarDAO.getAllWithNames();

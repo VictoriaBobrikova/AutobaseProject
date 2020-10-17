@@ -75,26 +75,26 @@ public class DriverService {
     }
 
 
-    public static Driver getByCarMarkService(String carMark) {
-        Driver driver = new Driver();
+    public static List<Driver> getByCarMarkService(String carMark) {
+        List<Driver> driverList = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
-            driver = driverDAO.getByCarMark(carMark);
+            driverList = driverDAO.getByCarMark(carMark);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return driver;
+        return driverList;
     }
 
-    public static Driver getByCarNumberService(String carNumber) {
-        Driver driver = new Driver();
+    public static List<Driver> getByCarNumberService(String carNumber) {
+        List<Driver> driverList = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
-            driver = driverDAO.getByCarNumber(carNumber);
+            driverList = driverDAO.getByCarNumber(carNumber);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return driver;
+        return driverList;
     }
 
 }

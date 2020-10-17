@@ -7,8 +7,7 @@ import main.java.ru.autobase.service.ConnectDriverCarService;
 import main.java.ru.autobase.service.DriverService;
 
 import java.sql.*;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import main.java.ru.autobase.entity.Driver;
 
@@ -46,7 +45,7 @@ public class Main {
 //        Driver driver = new Driver(1, "Tolya");
 //        DriverService.updateService(driver);
 
-//        DriverService.deleteService(26);
+//        DriverService.deleteService(30);
 
 //        List<Driver> driverList = DriverService.getAllAlphabetOrderService();
 //        for (Driver d : driverList) {
@@ -56,15 +55,24 @@ public class Main {
 //        }
 
 //        System.out.println("driver1");
-//        Driver driver1 = DriverService.getByCarMarkService("Audi");
-//        System.out.println(driver1.getIdDriver() + " " + driver1.getDriverName());
+//        List<Driver> driverList = DriverService.getByCarMarkService("BMW");
+//        for (Driver d : driverList) {
+//            System.out.println(d.getIdDriver() + " " + d.getDriverName());
+//        }
 //
 //        System.out.println("driver2");
-//        Driver driver2 = DriverService.getByCarNumberService("в123хх");
-//        System.out.println(driver2.getIdDriver() + " " + driver2.getDriverName());
+//        List<Driver> driverList = DriverService.getByCarNumberService("а123хх");
+//        for (Driver d : driverList) {
+//            System.out.println(d.getIdDriver() + " " + d.getDriverName());
+//        }
 
 //        System.out.println("car");
 //        Car car = CarService.getByMarkService("Audi");
+//        for (Driver d : driverList) {
+//            if (d.getIdDriver()<10) {
+//                System.out.println(" " + d.getIdDriver() + " " + d.getDriverName());
+//            } else {System.out.println(d.getIdDriver() + " " + d.getDriverName());}
+//        }
 //        System.out.println(car.getIdCar() + " " + car.getCarNumber() + " " + car.getCarMark());
 
 //        System.out.println("car1");
@@ -103,13 +111,25 @@ public class Main {
 //        ConnectDriverCarService.deleteService(conDrCar);
 
 //        System.out.println("map");
-//        Map<String, StringBuilder> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
-//        for (Map.Entry<String, StringBuilder> entry : conDrCarMap.entrySet()) {
-//            System.out.println(entry.getKey() + " : " + entry.getValue());
+//        List<String> conDrCarList = ConnectDriverCarService.getAllWithNamesService();
+//        List<String> carNumberList = new ArrayList<>();
+//        Set<String> driverNameSet = new HashSet<>();
+//        for (String con : conDrCarList) {
+//            Scanner scan = new Scanner(con);
+//            String driverName = scan.next() + " " + scan.next();
+//            carNumberList.add(scan.next());
+//            if (!driverNameSet.add(driverName)) carNumberList.clear();
+//            System.out.println();
 //        }
 
+
+        Map<String, String> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
+        for (Map.Entry<String, String> entry : conDrCarMap.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+
 //        ConnectDriverCar conDrCar = new ConnectDriverCar(16,16);
-//        ConnectDriverCarService.deleteService(conDrCar);
+//        ConnectDriverCarService.createService(conDrCar);
 //
 //        List<ConnectDriverCar> conDrCarList = ConnectDriverCarService.getAllService();
 //        for (ConnectDriverCar c : conDrCarList) {
@@ -121,10 +141,10 @@ public class Main {
 //            System.out.println(c.getCarNumber());
 //        };
 
-        List<Driver> drivers = ConnectDriverCarService.getDriversByCarIdService(1);
-        for (Driver d : drivers) {
-            System.out.println(d.getDriverName());
-        }
+//        List<Driver> drivers = ConnectDriverCarService.getDriversByCarIdService(1);
+//        for (Driver d : drivers) {
+//            System.out.println(d.getDriverName());
+//        }
 
 
     }

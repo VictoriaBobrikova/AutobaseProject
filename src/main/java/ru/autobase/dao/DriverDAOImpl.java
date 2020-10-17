@@ -118,33 +118,33 @@ public class DriverDAOImpl implements DriverDAO{
     }
 
     @Override
-    public Driver getByCarMark(String carMark) {
-        Driver driver = new Driver();
+    public List<Driver> getByCarMark(String carMark) {
+        List<Driver> driverList = new ArrayList<>();
         String sql = "SELECT id_driver, driver_name from drivers " +
                 "join dc_connection on id_driver = id_d_con " +
                 "join car_info on id_c_con = id_car " +
                 "join car_mark on id_mark_info = id_mark " +
-                "WHERE mark = ?";
+                "WHERE mark = ? order by driver_name";
 
         try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
             prepStat.setString(1, carMark);
             ResultSet rs = prepStat.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                Driver driver = new Driver();
                 driver.setIdDriver(rs.getInt("id_driver"));
                 driver.setDriverName(rs.getString("driver_name"));
-            } else {
-                System.err.print("Not found this mark");
+                driverList.add(driver);
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return driver;
+        return driverList;
     }
 
 
     @Override
-    public Driver getByCarNumber(String carNumber) {
-        Driver driver = new Driver();
+    public List<Driver> getByCarNumber(String carNumber) {
+        List<Driver> driverList = new ArrayList<>();
         String sql = "SELECT id_driver, driver_name from drivers " +
                 "join dc_connection on id_driver = id_d_con " +
                 "join car_info on id_c_con = id_car " +
@@ -153,16 +153,16 @@ public class DriverDAOImpl implements DriverDAO{
         try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
             prepStat.setString(1, carNumber);
             ResultSet rs = prepStat.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                Driver driver = new Driver();
                 driver.setIdDriver(rs.getInt("id_driver"));
                 driver.setDriverName(rs.getString("driver_name"));
-            } else {
-                System.err.print("Not found this car number");
+                driverList.add(driver);
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return driver;
+        return driverList;
     }
 
     enum SQLDriver {
