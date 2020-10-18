@@ -45,7 +45,7 @@ public class CarDAOImpl implements CarDAO{
     @Override
     public Car getById(Integer id) {
         Car car = new Car();
-        try (PreparedStatement prepStat = connection.prepareStatement(CarDAOImpl.SQLCar.SELECT.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.SELECT.QUERY)) {
             prepStat.setInt(1, id);
             ResultSet rs = prepStat.executeQuery();
             car.setCarNumber(rs.getString("car_number"));
@@ -83,7 +83,7 @@ public class CarDAOImpl implements CarDAO{
 
     @Override
     public void update(Car car) {
-        try (PreparedStatement prepStat = connection.prepareStatement(CarDAOImpl.SQLCar.UPDATE.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.UPDATE.QUERY)) {
             prepStat.setString(1, car.getCarNumber());
             prepStat.setInt(2, car.getIdCar());
             prepStat.executeUpdate();
@@ -95,7 +95,7 @@ public class CarDAOImpl implements CarDAO{
 
     @Override
     public void delete(Integer id) {
-        try (PreparedStatement prepStat = connection.prepareStatement(CarDAOImpl.SQLCar.DELETE.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.DELETE.QUERY)) {
             prepStat.setInt(1, id);
             prepStat.executeUpdate();
         } catch (SQLException e) {
@@ -105,31 +105,30 @@ public class CarDAOImpl implements CarDAO{
 
 
     @Override
-    public Car getByCarMark(String carMark) {
-        Car car = new Car();
+    public List<Car> getByCarMark(String carMark) {
+        List<Car> carList = new ArrayList<>();
         String sql = "SELECT id_car, car_number FROM car_info " +
                 "JOIN car_mark ON id_mark_info = id_mark WHERE mark = ?";
 
         try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
             prepStat.setString(1, carMark);
             ResultSet rs = prepStat.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                Car car = new Car();
                 car.setIdCar(rs.getInt("id_car"));
                 car.setCarNumber(rs.getString("car_number"));
-                car.setCarMark(carMark);
-            } else {
-                System.err.print("Not found this car mark");
+                carList.add(car);
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return car;
+        return carList;
     }
 
 
     @Override
-    public Car getByDriverName(String driverName) {
-        Car car = new Car();
+    public List<Car> getByDriverName(String driverName) {
+        List<Car> carList = new ArrayList<>();
         String sql = "SELECT id_car, car_number, mark FROM car_info " +
                 "JOIN car_mark ON id_mark_info = id_mark " +
                 "JOIN dc_connection ON id_car = id_c_con " +
@@ -140,16 +139,18 @@ public class CarDAOImpl implements CarDAO{
             prepStat.setString(1, driverName);
             ResultSet rs = prepStat.executeQuery();
             if (rs.next()) {
+                Car car = new Car();
                 car.setIdCar(rs.getInt("id_car"));
                 car.setCarNumber(rs.getString("car_number"));
                 car.setCarMark(rs.getString("mark"));
+                carList.add(car);
             } else {
                 System.err.print("Not found this driver name ");
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return car;
+        return carList;
     }
 
     enum SQLCar {

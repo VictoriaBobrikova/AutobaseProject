@@ -12,17 +12,6 @@ import java.util.*;
 import main.java.ru.autobase.entity.Driver;
 
 /*
-Консоль:
-Введите подходящий номер запроса:
-1 - создать новую запись в базе
-2 - найти запись в базе
-3 - изменить записаь в базе
-4 - удалить запись из базы
-Выберите требуемый запрос:
-1 - записать в базу нового водителя
-2 - записать в базу новый автомобиль
-3? записать в базу новую марку автомобиля
-
 1 - вывести всех водителей
 2 - найти водителей по параметрам
 3 - найти автомобиль по параметрам
@@ -36,18 +25,85 @@ import main.java.ru.autobase.entity.Driver;
 public class Main {
     public static void main(String[] args) {
 
-//        Driver driver = new Driver("Katya");
-//        DriverService.createService(driver);
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Working with Autobase. Welcome!");
+        String inputString;
+
+        boolean exit = false;
+
+        while(!exit) {
+            System.out.println("Please input a number of your query and press \"Enter\":\n" +
+                    "1 - create new instance\n" +
+                    "2 - get instance from base\n" +
+                    "3 - change instance\n" +
+                    "4 - delete instance\n" +
+                    "To exit press #");
+            if (scan.hasNext()) {
+                String input = scan.nextLine();
+                switch (input) {
+                    case ("1"):
+                        System.out.println("1 - create a new driver note\n" +
+                                           "2 - create a new car note");
+                        if (scan.hasNext()) {
+                            inputString = scan.nextLine();
+                            if (inputString.equals("1")) {
+                                System.out.println("Input driver's name and surname");
+                                if (scan.hasNext()) {
+                                    String driverName = scan.nextLine();
+                                    Driver driverCreate = new Driver(driverName);
+                                    DriverService.createService(driverCreate);
+                                    System.out.println("OK");
+                                }
+                            } else if (inputString.equals("2")) {
+                                System.out.println("Input car number and car mark with space delimiter");
+                                if (scan.hasNext()) {
+                                    String carNumber = scan.next();
+                                    String carMark = scan.next();
+                                    Car car = new Car(carNumber, carMark);
+                                    CarService.createService(car);
+                                    System.out.println("OK");
+                                }
+                            } else System.out.println("Wrong query, try again");
+                        }
+                        break;
+                    case ("2"):
+                        System.out.println("hi2");
+                        break;
+                    case ("3"):
+                        System.out.println("hi3");
+                        break;
+                    case ("4"):
+                        System.out.println("hi4");
+                        break;
+                    case ("#"):
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("Wrong query, try again");
+                        break;
+                }
+                System.out.println("Thanks :)");
+            }
+        }
+        scan.close();
+//        try {
+//            int input = scan.nextInt();
+//        }
+//        catch(InputMismatchException fg) {
+//            System.out.print("Not a number, try again. To exit press ?" );
+//        }
+
+
 
 //        Driver driver = DriverService.getByIdService(1);
 //        System.out.println(driver.getDriverName());
 
-//        Driver driver = new Driver(1, "Tolya");
+//        Driver driver = new Driver(1,"Tolya");
 //        DriverService.updateService(driver);
 
 //        DriverService.deleteService(30);
 
-//        List<Driver> driverList = DriverService.getAllAlphabetOrderService();
+//        List<Driver> driverList = DriverService.getAllService();
 //        for (Driver d : driverList) {
 //            if (d.getIdDriver()<10) {
 //                System.out.println(" " + d.getIdDriver() + " " + d.getDriverName());
@@ -66,34 +122,31 @@ public class Main {
 //            System.out.println(d.getIdDriver() + " " + d.getDriverName());
 //        }
 
-//        System.out.println("car");
-//        Car car = CarService.getByMarkService("Audi");
-//        for (Driver d : driverList) {
-//            if (d.getIdDriver()<10) {
-//                System.out.println(" " + d.getIdDriver() + " " + d.getDriverName());
-//            } else {System.out.println(d.getIdDriver() + " " + d.getDriverName());}
-//        }
-//        System.out.println(car.getIdCar() + " " + car.getCarNumber() + " " + car.getCarMark());
 
-//        System.out.println("car1");
-//        Car car1 = CarService.getByDriverNameService("Vadim Privalov");
-//        System.out.println(car1.getIdCar() + " " + car1.getCarNumber() + " " + car1.getCarMark());
+//        List<Car> carList = CarService.getByCarMarkService("Audi");
+//        for (Car c : carList) {
+//            System.out.println(c.getIdCar() + " " + c.getCarNumber());
+//        }
+//        System.out.println("name");
+//        List<Car> carList1 = CarService.getByDriverNameService("Arina Panova");
+//        for (Car c : carList1) {
+//            System.out.println(c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());
+//        }
 
 //        System.out.println("car3");
 //        Car car1 = CarService.getByIdService(1);
 //        System.out.println(car1.getCarNumber() + " " + car1.getCarMark());
 
 //        Car car = new Car("ц333цц", "Volvo");
-//        CarService.createService(car);
 //        CarService.deleteService(19);
 
 //        System.out.println("list");
-//        List<Car> carList = CarService.getAllService();
-//        for (Car c : carList) {
-//            if (c.getIdCar()<10) {
-//                System.out.println(" " + c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());
-//            } else {System.out.println(c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());}
-//        }
+        List<Car> carList = CarService.getAllService();
+        for (Car c : carList) {
+            if (c.getIdCar()<10) {
+                System.out.println(" " + c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());
+            } else {System.out.println(c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());}
+        }
 
 //        System.out.println("get");
 //        Car car_get = CarService.getByIdService(1);
@@ -123,10 +176,10 @@ public class Main {
 //        }
 
 
-        Map<String, String> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
-        for (Map.Entry<String, String> entry : conDrCarMap.entrySet()) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
+//        Map<String, String> conDrCarMap = ConnectDriverCarService.getAllWithNamesService();
+//        for (Map.Entry<String, String> entry : conDrCarMap.entrySet()) {
+//            System.out.println(entry.getKey() + " " + entry.getValue());
+//        }
 
 //        ConnectDriverCar conDrCar = new ConnectDriverCar(16,16);
 //        ConnectDriverCarService.createService(conDrCar);

@@ -20,10 +20,6 @@ public class DriverDAOImpl implements DriverDAO{
         try (PreparedStatement prepStat = connection.prepareStatement(SQLDriver.INSERT.QUERY)) {
             prepStat.setString(1, driver.getDriverName());
             prepStat.executeUpdate();
-//            int result = prepStat.executeUpdate();
-//            if (result != 1) {
-//                System.out.print("Invalid name");
-//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

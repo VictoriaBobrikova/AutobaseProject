@@ -19,7 +19,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
 
     @Override
     public void create(ConnectDriverCar conDrCar) {
-        try (PreparedStatement prepStat = connection.prepareStatement(ConnectDriverCarDAOImpl.SQLConDrCar.INSERT.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLConDrCar.INSERT.QUERY)) {
             prepStat.setInt(1, conDrCar.getIdDriverCon());
             prepStat.setInt(2, conDrCar.getIdCarCon());
             prepStat.setInt(3, conDrCar.getIdDriverCon());
@@ -60,8 +60,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
     @Override
     public List<Car> getCarsByDriverId(Integer idDriver) {
         List<Car> cars = new ArrayList<>();
-        try (PreparedStatement prepStat = connection.prepareStatement(
-                ConnectDriverCarDAOImpl.SQLConDrCar.SELECT_CARS.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLConDrCar.SELECT_CARS.QUERY)) {
             prepStat.setInt(1, idDriver);
             ResultSet rs  = prepStat.executeQuery();
             while (rs.next()) {
@@ -78,8 +77,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
     @Override
     public List<Driver> getDriversByCarId(Integer idCar) {
         List<Driver> drivers = new ArrayList<>();
-        try (PreparedStatement prepStat = connection.prepareStatement(
-            ConnectDriverCarDAOImpl.SQLConDrCar.SELECT_DRIVERS.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLConDrCar.SELECT_DRIVERS.QUERY)) {
             prepStat.setInt(1, idCar);
             ResultSet rs  = prepStat.executeQuery();
             while (rs.next()) {
@@ -134,8 +132,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
 
     @Override
     public void delete(ConnectDriverCar conDrCar) {
-        try (PreparedStatement prepStat = connection.prepareStatement(
-                ConnectDriverCarDAOImpl.SQLConDrCar.DELETE.QUERY)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLConDrCar.DELETE.QUERY)) {
             prepStat.setInt(1, conDrCar.getIdDriverCon());
             prepStat.setInt(2, conDrCar.getIdCarCon());
             prepStat.executeUpdate();

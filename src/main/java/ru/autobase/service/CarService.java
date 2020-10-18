@@ -69,27 +69,27 @@ public class CarService {
     }
 
 
-    public static Car getByCarMarkService(String carMark) {
-        Car car = new Car();
+    public static List<Car> getByCarMarkService(String carMark) {
+        List<Car> carList = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
             CarDAO carDAO = new CarDAOImpl(connection);
-            car = carDAO.getByCarMark(carMark);
+            carList = carDAO.getByCarMark(carMark);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return car;
+        return carList;
     }
 
 
-    public static Car getByDriverNameService(String driverName) {
-        Car car = new Car();
+    public static List<Car> getByDriverNameService(String driverName) {
+        List<Car> carList = new ArrayList<>();
         try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
             CarDAO carDAO = new CarDAOImpl(connection);
-            car = carDAO.getByDriverName(driverName);
+            carList = carDAO.getByDriverName(driverName);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        return car;
+        return carList;
     }
 
 }
