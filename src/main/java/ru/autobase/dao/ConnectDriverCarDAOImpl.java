@@ -26,7 +26,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
             prepStat.setInt(4, conDrCar.getIdCarCon());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -52,7 +52,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
                 conDrCarList.add(conDrCar);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return conDrCarList;
     }
@@ -69,7 +69,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
                 cars.add(car);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
         return cars;
     }
@@ -86,7 +86,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
                 drivers.add(driver);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
         return drivers;
     }
@@ -105,7 +105,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
                 conDrCarList.add(rs.getString("driver_name") + " " + rs.getString("car_number"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
 
         Map<String, String> conDrCarMap = new HashMap<>();
@@ -137,7 +137,7 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
             prepStat.setInt(2, conDrCar.getIdCarCon());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 

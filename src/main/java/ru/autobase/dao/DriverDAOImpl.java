@@ -21,7 +21,7 @@ public class DriverDAOImpl implements DriverDAO{
             prepStat.setString(1, driver.getDriverName());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -35,10 +35,10 @@ public class DriverDAOImpl implements DriverDAO{
             if (rs.next()) {
                 driver.setDriverName(rs.getString("driver_name"));
             } else {
-                System.err.print("Error: not found id, result is ");
+                System.err.print("No such id, ");
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driver;
     }
@@ -61,7 +61,7 @@ public class DriverDAOImpl implements DriverDAO{
                 driverList.add(driver);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
@@ -75,7 +75,7 @@ public class DriverDAOImpl implements DriverDAO{
             prepStat.setInt(2, driver.getIdDriver());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -86,7 +86,7 @@ public class DriverDAOImpl implements DriverDAO{
             prepStat.setInt(1, id);
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -108,7 +108,7 @@ public class DriverDAOImpl implements DriverDAO{
                 driverList.add(driver);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
@@ -132,7 +132,7 @@ public class DriverDAOImpl implements DriverDAO{
                 driverList.add(driver);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
@@ -156,7 +156,7 @@ public class DriverDAOImpl implements DriverDAO{
                 driverList.add(driver);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }

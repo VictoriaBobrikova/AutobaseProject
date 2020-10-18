@@ -29,7 +29,7 @@ public class CarDAOImpl implements CarDAO{
             prepStat.setString(2, car.getCarMark());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
 
         try (PreparedStatement prepStat = connection.prepareStatement(sql2)) {
@@ -37,7 +37,7 @@ public class CarDAOImpl implements CarDAO{
             prepStat.setString(2, car.getCarMark());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -51,7 +51,7 @@ public class CarDAOImpl implements CarDAO{
             car.setCarNumber(rs.getString("car_number"));
             car.setCarMark(rs.getString("mark"));
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return car;
     }
@@ -75,7 +75,7 @@ public class CarDAOImpl implements CarDAO{
                 carList.add(car);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return carList;
     }
@@ -88,7 +88,7 @@ public class CarDAOImpl implements CarDAO{
             prepStat.setInt(2, car.getIdCar());
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -99,7 +99,7 @@ public class CarDAOImpl implements CarDAO{
             prepStat.setInt(1, id);
             prepStat.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Query error, try again");
         }
     }
 
@@ -120,7 +120,7 @@ public class CarDAOImpl implements CarDAO{
                 carList.add(car);
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return carList;
     }
@@ -148,7 +148,7 @@ public class CarDAOImpl implements CarDAO{
                 System.err.print("Not found this driver name ");
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return carList;
     }

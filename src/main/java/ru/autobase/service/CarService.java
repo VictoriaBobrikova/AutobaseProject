@@ -21,7 +21,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             carDAO.create(car);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -31,7 +31,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             car = carDAO.getById(id);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return car;
     }
@@ -43,7 +43,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             carList = carDAO.getAll();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return carList;
     }
@@ -54,7 +54,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             carDAO.update(car);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -64,7 +64,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             carDAO.delete(id);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -75,7 +75,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             carList = carDAO.getByCarMark(carMark);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return carList;
     }
@@ -87,7 +87,7 @@ public class CarService {
             CarDAO carDAO = new CarDAOImpl(connection);
             carList = carDAO.getByDriverName(driverName);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return carList;
     }

@@ -24,20 +24,10 @@ public class ConnectDriverCarService {
             ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
             conDrCarDAO.create(conDrCar);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
-//
-//    public static ConnectDriverCar getByIdService(Integer id) {
-//        Car car = new Car();
-//        try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
-//            ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
-//            car = conDrCarDAO.getById(id);
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
-//        return conDrCar;
-//    }
+
 
     public static List<ConnectDriverCar> getAllService () {
         List<ConnectDriverCar> conDrCarList = new ArrayList<>();
@@ -45,10 +35,11 @@ public class ConnectDriverCarService {
             ConnectDriverCarDAO carDAO = new ConnectDriverCarDAOImpl(connection);
             conDrCarList = carDAO.getAll();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return conDrCarList;
     }
+
 
     public static Map<String, String> getAllWithNamesService () {
         Map<String, String> conDrCarMap = new HashMap<>();
@@ -56,20 +47,10 @@ public class ConnectDriverCarService {
             ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
             conDrCarMap = conDrCarDAO.getAllWithNames();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return conDrCarMap;
     }
-
-
-//    public static void updateService(ConnectDriverCar conDrCar) {
-//        try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
-//            ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
-//            conDrCarDAO.update(conDrCar);
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
-//    }
 
 
     public static void deleteService(ConnectDriverCar conDrCar) {
@@ -77,7 +58,7 @@ public class ConnectDriverCarService {
             ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
             conDrCarDAO.delete(conDrCar);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -88,7 +69,7 @@ public class ConnectDriverCarService {
             ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
             cars = conDrCarDAO.getCarsByDriverId(idDriver);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return cars;
     }
@@ -99,21 +80,8 @@ public class ConnectDriverCarService {
             ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
             drivers = conDrCarDAO.getDriversByCarId(idCar);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return drivers;
     }
-//
-//
-//    public static Car getByDriverNameService(String driverName) {
-//        Car car = new Car();
-//        try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
-//            ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
-//            car = conDrCarDAO.getByDriverName(driverName);
-//        } catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
-//        return car;
-//    }
-
 }

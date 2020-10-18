@@ -11,28 +11,22 @@ import java.util.*;
 
 import main.java.ru.autobase.entity.Driver;
 
-/*
-1 - вывести всех водителей
-2 - найти водителей по параметрам
-3 - найти автомобиль по параметрам
-
-1 - изменить запись водителя
-2 - изменить запись автомобиля
-
-1 - удалить запись водителя
-2 - удалить запись автомобиля
- */
 public class Main {
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
         System.out.println("Working with Autobase. Welcome!");
         String inputString;
+        String driverName;
+        String carNumber;
+        String carMark;
+        int id;
+        String pattern;
 
         boolean exit = false;
 
         while(!exit) {
-            System.out.println("Please input a number of your query and press \"Enter\":\n" +
+            System.out.println("Please input the number of your query and press \"Enter\":\n" +
                     "1 - create new instance\n" +
                     "2 - get instance from base\n" +
                     "3 - change instance\n" +
@@ -42,23 +36,28 @@ public class Main {
                 String input = scan.nextLine();
                 switch (input) {
                     case ("1"):
-                        System.out.println("1 - create a new driver note\n" +
+                        System.out.println("Choose the next number\n" +
+                                           "1 - create a new driver note\n" +
                                            "2 - create a new car note");
                         if (scan.hasNext()) {
                             inputString = scan.nextLine();
                             if (inputString.equals("1")) {
-                                System.out.println("Input driver's name and surname");
+                                System.out.println("Input driver's name and surname (To exit press #)");
+                                pattern = "";
                                 if (scan.hasNext()) {
-                                    String driverName = scan.nextLine();
+                                    driverName = scan.nextLine();
+                                    if(driverName.equals("#")) break;
                                     Driver driverCreate = new Driver(driverName);
                                     DriverService.createService(driverCreate);
                                     System.out.println("OK");
                                 }
                             } else if (inputString.equals("2")) {
-                                System.out.println("Input car number and car mark with space delimiter");
+                                System.out.println("Input car number and car mark with space delimiter (To exit press #)");
+                                pattern = "";
                                 if (scan.hasNext()) {
-                                    String carNumber = scan.next();
-                                    String carMark = scan.next();
+                                    carNumber = scan.next();
+                                    if(carNumber.equals("#")) break;
+                                    carMark = scan.next();
                                     Car car = new Car(carNumber, carMark);
                                     CarService.createService(car);
                                     System.out.println("OK");
@@ -67,7 +66,107 @@ public class Main {
                         }
                         break;
                     case ("2"):
-                        System.out.println("hi2");
+                        System.out.println("Choose the next number\n" +
+                                           "1 - get drivers...\n" +
+                                           "2 - get cars...\n" +
+                                           "3 - get driver-car pairs...");
+                        if (scan.hasNext()) {
+                            inputString = scan.nextLine();
+                            switch (inputString) {
+                                case ("1"):
+                                    System.out.println("Choose a variant number\n" +
+                                            "1 - get all drivers\n" +
+                                            "2 - get all alphabetically\n" +
+                                            "3 - get driver by id\n" +
+                                            "4 - get drivers by car mark\n" +
+                                            "5 - get drivers by car number");
+                                    if (scan.hasNext()) {
+                                        inputString = scan.nextLine();
+                                        switch (inputString) {
+                                            case ("1"):
+                                                List<Driver> driverList1 = DriverService.getAllService();
+                                                for (Driver d : driverList1) {
+                                                    System.out.println(d.getIdDriver() + " " + d.getDriverName());
+                                                }
+                                                break;
+                                            case ("2"):
+                                                List<Driver> driverList2 = DriverService.getAllAlphabetOrderService();
+                                                for (Driver d : driverList2) {
+                                                    System.out.println(d.getIdDriver() + " " + d.getDriverName());
+                                                }
+                                                break;
+                                            case ("3"):
+                                                System.out.println("Input driver's id");
+                                                //что-то не так
+                                                if (scan.hasNext()) {
+                                                    try {
+                                                        id = scan.nextInt();
+                                                    } catch (InputMismatchException e) {
+                                                        System.err.println("id should be a number, try again");
+                                                        break;
+                                                    }
+                                                    Driver driverId = DriverService.getByIdService(id);
+                                                    System.out.println(driverId.getDriverName());
+                                                }
+                                                break;
+                                            case ("4"):
+                                                System.out.println("Input car mark");
+                                                if (scan.hasNext()) {
+                                                    carMark = scan.nextLine();
+                                                    List<Driver> driverList4 = DriverService.getByCarMarkService(carMark);
+                                                    if (driverList4.isEmpty()) {
+                                                        System.out.println("No such mark");
+                                                        break;
+                                                    }
+                                                    for (Driver d : driverList4) {
+                                                        System.out.println(d.getIdDriver() + " " + d.getDriverName());
+                                                    }
+                                                }
+                                                break;
+                                            case ("5"):
+                                                System.out.println("Input car number");
+                                                if (scan.hasNext()) {
+                                                    carNumber = scan.nextLine();
+                                                    List<Driver> driverList5 = DriverService.getByCarNumberService(carNumber);
+                                                    if (driverList5.isEmpty()) {
+                                                        System.out.println("No such car number");
+                                                        break;
+                                                    }
+                                                    for (Driver d : driverList5) {
+                                                        System.out.println(d.getIdDriver() + " " + d.getDriverName());
+                                                    }
+                                                }
+                                                break;
+                                            default:
+                                                System.out.println("Wrong query, try again");
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                case ("2"):
+                                    System.out.println("Input car number and car mark with space delimiter");
+                                    if (scan.hasNext()) {
+                                        carNumber = scan.next();
+                                        carMark = scan.next();
+                                        Car car = new Car(carNumber, carMark);
+                                        CarService.createService(car);
+                                        System.out.println("OK");
+                                    }
+                                    break;
+                                case("3"):
+                                    System.out.println("Input car number and car mark with space delimiter");
+                                    if (scan.hasNext()) {
+                                        carNumber = scan.next();
+                                        carMark = scan.next();
+                                        Car car = new Car(carNumber, carMark);
+                                        CarService.createService(car);
+                                        System.out.println("OK");
+                                    }
+                                default:
+                                    System.out.println("Wrong query, try again");
+                                    break;
+                            }
+                        }
                         break;
                     case ("3"):
                         System.out.println("hi3");
@@ -86,12 +185,7 @@ public class Main {
             }
         }
         scan.close();
-//        try {
-//            int input = scan.nextInt();
-//        }
-//        catch(InputMismatchException fg) {
-//            System.out.print("Not a number, try again. To exit press ?" );
-//        }
+
 
 
 
@@ -103,12 +197,7 @@ public class Main {
 
 //        DriverService.deleteService(30);
 
-//        List<Driver> driverList = DriverService.getAllService();
-//        for (Driver d : driverList) {
-//            if (d.getIdDriver()<10) {
-//                System.out.println(" " + d.getIdDriver() + " " + d.getDriverName());
-//            } else {System.out.println(d.getIdDriver() + " " + d.getDriverName());}
-//        }
+
 
 //        System.out.println("driver1");
 //        List<Driver> driverList = DriverService.getByCarMarkService("BMW");
@@ -141,12 +230,12 @@ public class Main {
 //        CarService.deleteService(19);
 
 //        System.out.println("list");
-        List<Car> carList = CarService.getAllService();
-        for (Car c : carList) {
-            if (c.getIdCar()<10) {
-                System.out.println(" " + c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());
-            } else {System.out.println(c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());}
-        }
+//        List<Car> carList = CarService.getAllService();
+//        for (Car c : carList) {
+//            if (c.getIdCar()<10) {
+//                System.out.println(" " + c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());
+//            } else {System.out.println(c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());}
+//        }
 
 //        System.out.println("get");
 //        Car car_get = CarService.getByIdService(1);

@@ -17,7 +17,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverDAO.create(driver);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -27,7 +27,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driver = driverDAO.getById(id);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driver;
     }
@@ -38,7 +38,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverList = driverDAO.getAll();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
@@ -50,7 +50,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverList = driverDAO.getAllAlphabetOrder();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
@@ -60,7 +60,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverDAO.update(driver);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -70,7 +70,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverDAO.delete(id);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
     }
 
@@ -81,7 +81,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverList = driverDAO.getByCarMark(carMark);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
@@ -92,7 +92,7 @@ public class DriverService {
             DriverDAO driverDAO = new DriverDAOImpl(connection);
             driverList = driverDAO.getByCarNumber(carNumber);
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Query error, try again");
         }
         return driverList;
     }
