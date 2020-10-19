@@ -1,7 +1,5 @@
 package main.java.ru.autobase.entity;
 
-import main.java.ru.autobase.service.DriverService;
-
 public class Car {
     private Integer idCar;
     private String carNumber;

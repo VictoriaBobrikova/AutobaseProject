@@ -1,9 +1,6 @@
 package main.java.ru.autobase.dao;
 
-import main.java.ru.autobase.entity.Car;
 import main.java.ru.autobase.entity.ConnectDriverCar;
-import main.java.ru.autobase.entity.Driver;
-import main.java.ru.autobase.service.ConnectDriverCarService;
 
 import java.sql.*;
 import java.util.*;
@@ -40,10 +37,8 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
     public List<ConnectDriverCar> getAll() {
         List<ConnectDriverCar> conDrCarList = new ArrayList<>();
 
-        String sql = "SELECT * FROM dc_connection ORDER BY id_d_con";
-
         try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(SQLConDrCar.SELECT.QUERY);
 
             while (rs.next()) {
                 ConnectDriverCar conDrCar = new ConnectDriverCar();
@@ -57,49 +52,13 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
         return conDrCarList;
     }
 
-    @Override
-    public List<Car> getCarsByDriverId(Integer idDriver) {
-        List<Car> cars = new ArrayList<>();
-        try (PreparedStatement prepStat = connection.prepareStatement(SQLConDrCar.SELECT_CARS.QUERY)) {
-            prepStat.setInt(1, idDriver);
-            ResultSet rs  = prepStat.executeQuery();
-            while (rs.next()) {
-                Car car = new Car();
-                car.setCarNumber(rs.getString("car_number"));
-                cars.add(car);
-            }
-        } catch (SQLException e) {
-            System.err.println("Query error, try again");
-        }
-        return cars;
-    }
-
-    @Override
-    public List<Driver> getDriversByCarId(Integer idCar) {
-        List<Driver> drivers = new ArrayList<>();
-        try (PreparedStatement prepStat = connection.prepareStatement(SQLConDrCar.SELECT_DRIVERS.QUERY)) {
-            prepStat.setInt(1, idCar);
-            ResultSet rs  = prepStat.executeQuery();
-            while (rs.next()) {
-                Driver driver = new Driver();
-                driver.setDriverName(rs.getString("driver_name"));
-                drivers.add(driver);
-            }
-        } catch (SQLException e) {
-            System.err.println("Query error, try again");
-        }
-        return drivers;
-    }
 
     @Override
     public Map<String, String> getAllWithNames() {
         List<String> conDrCarList = new ArrayList<>();
 
-        String sql = "SELECT driver_name, car_number FROM drivers " +
-                "JOIN dc_connection ON id_driver = id_d_con " +
-                "JOIN car_info ON id_c_con = id_car ORDER BY driver_name";
         try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(SQLConDrCar.SELECT_NAMES.QUERY);
             rs.next();
             while (rs.next()) {
                 conDrCarList.add(rs.getString("driver_name") + " " + rs.getString("car_number"));
@@ -145,14 +104,10 @@ public class ConnectDriverCarDAOImpl implements ConnectDriverCarDAO{
         INSERT("INSERT INTO dc_connection (id_d_con, id_c_con) SELECT ?, ? " +
                 "WHERE NOT EXISTS (SELECT id_d_con, id_c_con FROM dc_connection " +
                 "WHERE id_d_con = ? AND id_c_con = ?) LIMIT 1"),
-        SELECT_CARS("SELECT car_number FROM car_info " +
-                "JOIN dc_connection on id_car = id_c_con " +
-                "JOIN drivers on id_d_con = id_driver " +
-                "WHERE id_driver = ?"),
-        SELECT_DRIVERS("SELECT driver_name FROM car_info " +
-                "JOIN dc_connection on id_car = id_c_con " +
-                "JOIN drivers on id_d_con = id_driver " +
-                "WHERE id_car = ?"),
+        SELECT("SELECT * FROM dc_connection ORDER BY id_d_con"),
+        SELECT_NAMES("SELECT driver_name, car_number FROM drivers " +
+                "JOIN dc_connection ON id_driver = id_d_con " +
+                "JOIN car_info ON id_c_con = id_car ORDER BY driver_name"),
         DELETE("DELETE FROM dc_connection WHERE id_d_con = ? AND id_c_con = ?");
 
         String QUERY;

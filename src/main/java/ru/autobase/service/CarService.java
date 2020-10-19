@@ -2,10 +2,7 @@ package main.java.ru.autobase.service;
 
 import main.java.ru.autobase.dao.CarDAO;
 import main.java.ru.autobase.dao.CarDAOImpl;
-import main.java.ru.autobase.dao.DriverDAO;
-import main.java.ru.autobase.dao.DriverDAOImpl;
 import main.java.ru.autobase.entity.Car;
-import main.java.ru.autobase.entity.Driver;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -90,6 +87,17 @@ public class CarService {
             System.err.println("Query error, try again");
         }
         return carList;
+    }
+
+    public static List<Car> getByDriverIdService(Integer idDriver) {
+        List<Car> cars = new ArrayList<>();
+        try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
+            CarDAO carDAO = new CarDAOImpl(connection);
+            cars = carDAO.getByDriverId(idDriver);
+        } catch (SQLException e) {
+            System.err.println("Query error, try again");
+        }
+        return cars;
     }
 
 }

@@ -48,11 +48,9 @@ public class DriverDAOImpl implements DriverDAO{
     public List<Driver> getAll() {
         List<Driver> driverList = new ArrayList<>();
 
-        String sql = "SELECT * FROM drivers";
-
         try (Statement stmt = connection.createStatement()) {
 
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(SQLDriver.SELECT_ALL.QUERY);
 
             while (rs.next()) {
                 Driver driver = new Driver();
@@ -95,11 +93,9 @@ public class DriverDAOImpl implements DriverDAO{
     public List<Driver> getAllAlphabetOrder() {
         List<Driver> driverList = new ArrayList<>();
 
-        String sql = "SELECT * FROM drivers ORDER BY driver_name";
-
         try (Statement stmt = connection.createStatement()) {
 
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(SQLDriver.SELECT_ALPHA.QUERY);
 
             while (rs.next()) {
                 Driver driver = new Driver();
@@ -116,13 +112,8 @@ public class DriverDAOImpl implements DriverDAO{
     @Override
     public List<Driver> getByCarMark(String carMark) {
         List<Driver> driverList = new ArrayList<>();
-        String sql = "SELECT id_driver, driver_name from drivers " +
-                "join dc_connection on id_driver = id_d_con " +
-                "join car_info on id_c_con = id_car " +
-                "join car_mark on id_mark_info = id_mark " +
-                "WHERE mark = ? order by driver_name";
 
-        try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLDriver.SELECT_BY_CAR_MARK.QUERY)) {
             prepStat.setString(1, carMark);
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
@@ -141,12 +132,12 @@ public class DriverDAOImpl implements DriverDAO{
     @Override
     public List<Driver> getByCarNumber(String carNumber) {
         List<Driver> driverList = new ArrayList<>();
-        String sql = "SELECT id_driver, driver_name from drivers " +
-                "join dc_connection on id_driver = id_d_con " +
-                "join car_info on id_c_con = id_car " +
-                "WHERE car_number = ?";
+//        String sql = "SELECT id_driver, driver_name from drivers " +
+//                "join dc_connection on id_driver = id_d_con " +
+//                "join car_info on id_c_con = id_car " +
+//                "WHERE car_number = ?";
 
-        try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLDriver.SELECT_BY_CAR_NUMBER.QUERY)) {
             prepStat.setString(1, carNumber);
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
@@ -161,9 +152,43 @@ public class DriverDAOImpl implements DriverDAO{
         return driverList;
     }
 
+    @Override
+    public List<Driver> getByCarId(Integer idCar) {
+        List<Driver> drivers = new ArrayList<>();
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLDriver.SELECT_BY_CAR_ID.QUERY)) {
+            prepStat.setInt(1, idCar);
+            ResultSet rs  = prepStat.executeQuery();
+            while (rs.next()) {
+                Driver driver = new Driver();
+                driver.setIdDriver(rs.getInt("id_driver"));
+                driver.setDriverName(rs.getString("driver_name"));
+                drivers.add(driver);
+            }
+        } catch (SQLException e) {
+            System.err.println("Query error, try again");
+        }
+        return drivers;
+    }
+
+
     enum SQLDriver {
         INSERT("INSERT INTO drivers (driver_name) VALUES (?)"),
         SELECT("SELECT driver_name FROM drivers WHERE id_driver = ?"),
+        SELECT_ALL("SELECT * FROM drivers"),
+        SELECT_ALPHA("SELECT * FROM drivers ORDER BY driver_name"),
+        SELECT_BY_CAR_ID("SELECT id_driver, driver_name FROM car_info " +
+                "JOIN dc_connection ON id_car = id_c_con " +
+                "JOIN drivers ON id_d_con = id_driver " +
+                "WHERE id_car = ?"),
+        SELECT_BY_CAR_MARK("SELECT id_driver, driver_name from drivers " +
+                "join dc_connection on id_driver = id_d_con " +
+                "join car_info on id_c_con = id_car " +
+                "join car_mark on id_mark_info = id_mark " +
+                "WHERE UPPER(mark) LIKE UPPER(?) order by driver_name"),
+        SELECT_BY_CAR_NUMBER("SELECT id_driver, driver_name from drivers " +
+                "join dc_connection on id_driver = id_d_con " +
+                "join car_info on id_c_con = id_car " +
+                "WHERE car_number ?"),
         UPDATE("UPDATE drivers SET driver_name = ? WHERE id_driver = ?"),
         DELETE("DELETE FROM drivers WHERE id_driver = ?");
 

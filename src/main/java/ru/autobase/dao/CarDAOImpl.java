@@ -1,7 +1,6 @@
 package main.java.ru.autobase.dao;
 
 import main.java.ru.autobase.entity.Car;
-import main.java.ru.autobase.entity.Driver;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class CarDAOImpl implements CarDAO{
             car.setCarNumber(rs.getString("car_number"));
             car.setCarMark(rs.getString("mark"));
         } catch (SQLException e) {
-            System.err.println("Query error, try again");
+            System.err.print("Query error, try again, ");
         }
         return car;
     }
@@ -61,11 +60,9 @@ public class CarDAOImpl implements CarDAO{
     public List<Car> getAll() {
         List<Car> carList = new ArrayList<>();
 
-        String sql = "SELECT id_car, car_number, mark FROM car_info JOIN car_mark ON id_mark_info = id_mark";
-
         try (Statement stmt = connection.createStatement()) {
 
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(SQLCar.SELECT_ALL.QUERY);
 
             while (rs.next()) {
                 Car car = new Car();
@@ -107,10 +104,8 @@ public class CarDAOImpl implements CarDAO{
     @Override
     public List<Car> getByCarMark(String carMark) {
         List<Car> carList = new ArrayList<>();
-        String sql = "SELECT id_car, car_number FROM car_info " +
-                "JOIN car_mark ON id_mark_info = id_mark WHERE mark = ?";
 
-        try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.SELECT_BY_CAR_MARK.QUERY)) {
             prepStat.setString(1, carMark);
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
@@ -129,23 +124,16 @@ public class CarDAOImpl implements CarDAO{
     @Override
     public List<Car> getByDriverName(String driverName) {
         List<Car> carList = new ArrayList<>();
-        String sql = "SELECT id_car, car_number, mark FROM car_info " +
-                "JOIN car_mark ON id_mark_info = id_mark " +
-                "JOIN dc_connection ON id_car = id_c_con " +
-                "JOIN drivers ON id_d_con = id_driver " +
-                "WHERE driver_name = ?";
 
-        try (PreparedStatement prepStat = connection.prepareStatement(sql)) {
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.SELECT_BY_DRIVER_NAME.QUERY)) {
             prepStat.setString(1, driverName);
             ResultSet rs = prepStat.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 Car car = new Car();
                 car.setIdCar(rs.getInt("id_car"));
                 car.setCarNumber(rs.getString("car_number"));
                 car.setCarMark(rs.getString("mark"));
                 carList.add(car);
-            } else {
-                System.err.print("Not found this driver name ");
             }
         } catch (SQLException e) {
             System.err.println("Query error, try again");
@@ -153,9 +141,39 @@ public class CarDAOImpl implements CarDAO{
         return carList;
     }
 
+    @Override
+    public List<Car> getByDriverId(Integer idDriver) {
+        List<Car> cars = new ArrayList<>();
+        try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.SELECT_BY_DRIVER_ID.QUERY)) {
+            prepStat.setInt(1, idDriver);
+            ResultSet rs = prepStat.executeQuery();
+            while (rs.next()) {
+                Car car = new Car();
+                car.setCarNumber(rs.getString("car_number"));
+                cars.add(car);
+            }
+        } catch (SQLException e) {
+            System.err.println("Query error, try again");
+        }
+        return cars;
+    }
+
+
     enum SQLCar {
         SELECT("SELECT car_number, mark FROM car_info " +
                 "JOIN car_mark ON id_mark_info = id_mark WHERE id_car = ?"),
+        SELECT_ALL("SELECT id_car, car_number, mark FROM car_info JOIN car_mark ON id_mark_info = id_mark"),
+        SELECT_BY_DRIVER_ID("SELECT car_number FROM car_info " +
+                "JOIN dc_connection ON id_car = id_c_con " +
+                "JOIN drivers ON id_d_con = id_driver " +
+                "WHERE id_driver = ?"),
+        SELECT_BY_DRIVER_NAME("SELECT id_car, car_number, mark FROM car_info " +
+                "JOIN car_mark ON id_mark_info = id_mark " +
+                "JOIN dc_connection ON id_car = id_c_con " +
+                "JOIN drivers ON id_d_con = id_driver " +
+                "WHERE UPPER(driver_name) LIKE UPPER(?)"),
+        SELECT_BY_CAR_MARK("SELECT id_car, car_number FROM car_info " +
+                "JOIN car_mark ON id_mark_info = id_mark WHERE UPPER(mark) LIKE UPPER(?)"),
         UPDATE("UPDATE car_info SET car_number = ? WHERE id_car = ?"),
         DELETE("DELETE FROM car_info WHERE id_car = ?");
 

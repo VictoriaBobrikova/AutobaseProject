@@ -7,4 +7,5 @@ import java.util.List;
 public interface CarDAO extends GeneralDAO<Car, Integer> {
     List<Car> getByCarMark(String carMark);
     List<Car> getByDriverName(String driverName);
+    List<Car> getByDriverId(Integer idDriver);
 }

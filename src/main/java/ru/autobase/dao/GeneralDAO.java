@@ -1,8 +1,5 @@
 package main.java.ru.autobase.dao;
 
-import main.java.ru.autobase.entity.Driver;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public interface GeneralDAO<Entity, Key> {

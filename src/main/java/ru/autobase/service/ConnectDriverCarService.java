@@ -1,12 +1,8 @@
 package main.java.ru.autobase.service;
 
-import main.java.ru.autobase.dao.CarDAO;
-import main.java.ru.autobase.dao.CarDAOImpl;
 import main.java.ru.autobase.dao.ConnectDriverCarDAO;
 import main.java.ru.autobase.dao.ConnectDriverCarDAOImpl;
-import main.java.ru.autobase.entity.Car;
 import main.java.ru.autobase.entity.ConnectDriverCar;
-import main.java.ru.autobase.entity.Driver;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -62,26 +58,4 @@ public class ConnectDriverCarService {
         }
     }
 
-
-    public static List<Car> getCarsByDriverIdService(Integer idDriver) {
-        List<Car> cars = new ArrayList<>();
-        try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
-            ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
-            cars = conDrCarDAO.getCarsByDriverId(idDriver);
-        } catch (SQLException e) {
-            System.err.println("Query error, try again");
-        }
-        return cars;
-    }
-
-    public static List<Driver> getDriversByCarIdService(Integer idCar) {
-        List<Driver> drivers = new ArrayList<>();
-        try(Connection connection = DriverManager.getConnection("jdbc:sqlite:db/Autobase")) {
-            ConnectDriverCarDAO conDrCarDAO = new ConnectDriverCarDAOImpl(connection);
-            drivers = conDrCarDAO.getDriversByCarId(idCar);
-        } catch (SQLException e) {
-            System.err.println("Query error, try again");
-        }
-        return drivers;
-    }
 }
