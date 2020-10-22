@@ -143,19 +143,21 @@ public class CarDAOImpl implements CarDAO{
 
     @Override
     public List<Car> getByDriverId(Integer idDriver) {
-        List<Car> cars = new ArrayList<>();
+        List<Car> carList = new ArrayList<>();
         try (PreparedStatement prepStat = connection.prepareStatement(SQLCar.SELECT_BY_DRIVER_ID.QUERY)) {
             prepStat.setInt(1, idDriver);
             ResultSet rs = prepStat.executeQuery();
             while (rs.next()) {
                 Car car = new Car();
+                car.setIdCar(rs.getInt("id_car"));
                 car.setCarNumber(rs.getString("car_number"));
-                cars.add(car);
+                car.setCarMark(rs.getString("mark"));
+                carList.add(car);
             }
         } catch (SQLException e) {
             System.err.println("Query error, try again");
         }
-        return cars;
+        return carList;
     }
 
 
@@ -163,7 +165,8 @@ public class CarDAOImpl implements CarDAO{
         SELECT("SELECT car_number, mark FROM car_info " +
                 "JOIN car_mark ON id_mark_info = id_mark WHERE id_car = ?"),
         SELECT_ALL("SELECT id_car, car_number, mark FROM car_info JOIN car_mark ON id_mark_info = id_mark"),
-        SELECT_BY_DRIVER_ID("SELECT car_number FROM car_info " +
+        SELECT_BY_DRIVER_ID("SELECT id_car, car_number, mark FROM car_info " +
+                "JOIN car_mark ON id_mark_info = id_mark " +
                 "JOIN dc_connection ON id_car = id_c_con " +
                 "JOIN drivers ON id_d_con = id_driver " +
                 "WHERE id_driver = ?"),

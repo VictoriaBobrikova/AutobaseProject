@@ -3,7 +3,9 @@ package ru.autobase.testCS;
 import main.java.ru.autobase.entity.Car;
 import main.java.ru.autobase.service.CarService;
 import org.testng.Assert;
+import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -51,6 +53,18 @@ public class TestCarService {
         Assert.assertEquals(carAct, carExp);
     }
 
+    @AfterGroups(groups = "create")
+    public void deleteAftCreate() {
+        List<Car> carListAft = CarService.getByCarMarkService(newCarMark);
+        for (Car c : carListAft) {
+            if (c.getCarNumber().equals(newCarNumber)) {
+                idCar = c.getIdCar();
+                break;
+            }
+        }
+        CarService.deleteService(idCar);
+    }
+
 
     @Test(groups = "create", dependsOnMethods = "testGetByCarMark")
     public void testCreate() {
@@ -66,9 +80,9 @@ public class TestCarService {
 
         Car carNew = new Car(newCarNumber, newCarMark);
         CarService.createService(carNew);
-        List<Car> carListAft = CarService.getByCarMarkService("carMark");
+        List<Car> carListAft = CarService.getByCarMarkService(newCarMark);
         for (Car c : carListAft) {
-            if (c.getCarNumber().equals(newCarNumber) && c.getCarMark().equals(newCarMark)) {
+            if (c.getCarNumber().equals(newCarNumber)) {
                 ifExists = true;
                 break;
             }
@@ -77,7 +91,14 @@ public class TestCarService {
     }
 
 
-    @Test(groups = "create", dependsOnMethods = "testCreate")
+    @BeforeGroups(groups = "upd and del")
+    public void createBefore() {
+        Car carNew = new Car(newCarNumber, newCarMark);
+        CarService.createService(carNew);
+    }
+
+
+    @Test(groups = "upd and del", dependsOnGroups = "create")
     public void testUpdate() {
         List<Car> carListBef = CarService.getByCarMarkService(newCarMark);
         for (Car c : carListBef) {
@@ -93,7 +114,7 @@ public class TestCarService {
 
     }
 
-    @Test(groups = "create", dependsOnMethods = "testUpdate")
+    @Test(groups = "upd and del", dependsOnGroups = "create", dependsOnMethods = "testUpdate")
     public void testDelete() {
         List<Car> carListBef = CarService.getByCarMarkService(newCarMark);
         for (Car c : carListBef) {
@@ -104,17 +125,30 @@ public class TestCarService {
         CarService.deleteService(idCar);
         Car carAct = CarService.getByIdService(idCar);
         boolean ifDelete = true;
-        if (carAct.getCarMark().isEmpty() && carAct.getCarNumber().isEmpty()) ifDelete = false;
+        List<Car> carListAft = CarService.getByCarMarkService(newCarMark);
+        for (Car c : carListAft) {
+            if (c.getCarNumber().equals("w999ww")) {
+                ifDelete = false;
+                break;
+            }
+        }
         Assert.assertTrue(ifDelete);
     }
+
 
     List<Car> carExp = new ArrayList<>();
 
     @BeforeGroups(groups = "with driver")
-    public List<Car> createCarExpList() {
-        carExp.add(new Car("а123хх", "BMW"));
-        carExp.add(new Car("с888сс", "Skoda"));
+    public List<Car> createCarExp() {
+        carExp.add(new Car(1,"а123хх", "BMW"));
+        carExp.add(new Car(4,"с888сс", "Skoda"));
         return carExp;
+    }
+
+
+    @AfterGroups(groups = "with driver")
+    public void deleteCarExp() {
+        carExp.clear();
     }
 
     @Test(groups = "with driver")

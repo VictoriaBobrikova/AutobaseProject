@@ -55,4 +55,22 @@ public class Car {
     public void setCarMark(String carMark) {
         this.carMark = carMark;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) return true;
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+        Car car = (Car) o;
+        return idCar.equals(car.idCar);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + idCar;
+        return result;
+    }
 }

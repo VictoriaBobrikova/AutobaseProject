@@ -255,7 +255,7 @@ public class Main {
                                                             break outer;
                                                         }
                                                         for (Car c : carList3) {
-                                                            System.out.println(c.getCarNumber());
+                                                            System.out.println(c.getIdCar() + " " + c.getCarNumber() + " " + c.getCarMark());
                                                         }
                                                     } catch (NumberFormatException e) {
                                                         List<Car> carList3 = CarService.getByDriverNameService(driverName);
